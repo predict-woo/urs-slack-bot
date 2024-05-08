@@ -5,6 +5,7 @@ import os
 lambda_client = boto3.client("lambda")
 
 
+# Use python for faster loading time
 def handler(event, context):
     # Name or ARN of the Lambda function you want to invoke
     function_name = os.environ["TARGET_LAMBDA_ARN"]
