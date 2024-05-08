@@ -1,0 +1,12 @@
+config:
+  aws:region: ap-northeast-2
+  urs-slack-bot:OPENAI_API_KEY:
+    secure: AAABAEQ3ALk8nIOvoYpsCGAiDwS1XbvbSI9+oBr3hTM02aPgwHviAspTks3BaATKZJAxq+sF12wGUc90rIId6HDP6hg53trFJGnnRyV/B8hWjeKlXsXvPA==
+  urs-slack-bot:OPENAI_API_TOKEN:
+    secure: AAABAIjizyglRlblxYux/B9hmeloEnkEJiyZFDqm/naRBwbB9+rQCpd0o0OUJGnCsKh2MG6C+wMQKlO2svvZfySmEeKzJ6qS/KWqx8p8pZoE9Nbm/5h6bw==
+  urs-slack-bot:SLACK_API_TOKEN:
+    secure: AAABACnS5JSAYRgheMEzv8VgyM76ZCzddfNXuaSAQcrFZa3OYBVwl5Em3qYHz25kcvOyvb9amtRsdFZB9CBoqrpBY73V07yljzdL2aZwuP2lHIgGg65raDc=
+  urs-slack-bot:SLACK_SIGNING_SECRET:
+    secure: AAABAIZydb590ebqk611jMxmxrZ9wwDGDcZ4RN88GRP5mRP1IiV/DpsNf2avkSZrcjuYMHSsDKequauw/ZEkTw==
+  urs-slack-bot:SLACK_TOKEN:
+    secure: AAABAMv4CMd/1nQN/B2BYCwg7oKKWd1AMO0eomdPdxFwvfVtvVbcxuittE6mQGgK1qFJRzi+V+s1DuOo2FnEZIm5aQp6JcuBtq9BPnqfb/QQUjlps5jclpM=

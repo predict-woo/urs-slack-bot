@@ -1,0 +1,7 @@
+name: urs-slack-bot
+runtime: nodejs
+description: A lambda slack bot that reserves urs
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: ""

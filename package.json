@@ -1,0 +1,21 @@
+{
+  "name": "urs-slack-bot",
+  "main": "index.ts",
+  "devDependencies": {
+    "@types/node": "^18"
+  },
+  "dependencies": {
+    "@pulumi/aws": "^6.0.0",
+    "@pulumi/aws-apigateway": "^2.4.0",
+    "@pulumi/awsx": "^2.0.2",
+    "@pulumi/pulumi": "^3.113.0",
+    "aws-sdk": "^2.1614.0",
+    "dotenv": "^16.4.5",
+    "jsdom": "^24.0.0",
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "push": "pnpm -F functions build && pulumi up",
+    "pushy": "pnpm -F functions build && pulumi up --yes"
+  }
+}

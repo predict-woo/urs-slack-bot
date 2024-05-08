@@ -1,0 +1,9 @@
+/bin/
+
+# node_modules in child directories
+**/node_modules
+
+# all folders named dist
+**/dist
+
+.env
