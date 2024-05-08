@@ -7,9 +7,6 @@ const config = new pulumi.Config();
 export const slackAPIToken = config.requireSecret("SLACK_API_TOKEN");
 export const openaiAPIKey = config.requireSecret("OPENAI_API_KEY");
 
-// Sns topic for slack events
-const topic = new aws.sns.Topic("slackEventsTopic");
-
 // ## Roles
 // lambda role
 const lambdaRole = new aws.iam.Role("lambdaRole", {
@@ -27,27 +24,28 @@ const lambdaRole = new aws.iam.Role("lambdaRole", {
   },
 });
 
-// allow lambda to publish to sns
-new aws.iam.RolePolicy("lambdaSNSPolicy", {
-  role: lambdaRole,
-  policy: pulumi.all([topic.arn]).apply(([topicArn]) =>
-    JSON.stringify({
-      Version: "2012-10-17",
-      Statement: [
-        {
-          Effect: "Allow",
-          Action: "sns:Publish",
-          Resource: topicArn,
-        },
-      ],
-    })
-  ),
-});
-
 // attach policy to role
 new aws.iam.RolePolicyAttachment("lambdaRoleAttach", {
   role: lambdaRole,
   policyArn: aws.iam.ManagedPolicies.AWSLambdaBasicExecutionRole,
+});
+
+// allow lambda to invoke another lambda
+const lambdaInvokePolicy = new aws.iam.Policy("lambdaInvokePolicy", {
+  policy: pulumi.interpolate`{
+    "Version": "2012-10-17",
+    "Statement": [{
+      "Effect": "Allow",
+      "Action": "lambda:InvokeFunction",
+      "Resource": "*"
+    }]
+  }`,
+});
+
+// attach policy to role
+new aws.iam.RolePolicyAttachment("lambdaInvokePolicyAttach", {
+  role: lambdaRole,
+  policyArn: lambdaInvokePolicy.arn,
 });
 
 // ## Lambda functions
@@ -80,10 +78,10 @@ const quickReplyLambda = new aws.lambda.Function("quickReply", {
   }),
   environment: {
     variables: {
-      TOPIC_ARN: topic.arn,
+      TARGET_LAMBDA_ARN: eventLambda.arn,
     },
   },
-  timeout: 30,
+  timeout: 5,
 });
 
 // handler for interactive events
@@ -114,21 +112,6 @@ const root = new aws.lambda.CallbackFunction("root", {
       body: "Welcome to URS bot API!",
     };
   },
-});
-
-// Subscribe lambda to SNS topic
-new aws.sns.TopicSubscription("eventLambdaSubscription", {
-  topic: topic.arn,
-  protocol: "lambda",
-  endpoint: eventLambda.arn,
-});
-
-// Allow SNS to invoke lambda
-new aws.lambda.Permission("snsInvokeEventLambda", {
-  action: "lambda:InvokeFunction",
-  function: eventLambda.name,
-  principal: "sns.amazonaws.com",
-  sourceArn: topic.arn,
 });
 
 const api = new apigateway.RestAPI("api", {

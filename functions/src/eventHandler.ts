@@ -4,8 +4,7 @@ const base64Decode = (text: string) =>
   Buffer.from(text, "base64").toString("utf8");
 
 export const handler = async (event: any) => {
-  const encBody =
-    event.Records.length && base64Decode(event.Records[0].Sns.Message);
+  const encBody = base64Decode(event);
 
   // check if the event is from SNS
   if (!encBody) return;

@@ -1,13 +1,16 @@
 import { get } from "@kaistian/fetch";
 import { padStudentId } from "@kaistian/sso";
 import type { Result } from "@kaistian/types";
-import dateFormat from "dateformat";
 import { match } from "ts-pattern";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
 
 import type { UrsError } from "./error";
 import type { RoomId } from "./room";
+import { format, toZonedTime } from "date-fns-tz";
+import { ko } from "date-fns/locale";
+
+const timeZone = "Asia/Seoul";
 
 const successSchema = z
   .object({
@@ -86,8 +89,14 @@ export async function reserveRoom({
         strDeviceName: "desktop",
         strRoomId: roomId,
         strUserId: padStudentId(studentId),
-        strDate: dateFormat(date, "yyyymmdd"),
-        strTime: dateFormat(date, "HHMM"),
+        strDate: format(toZonedTime(date, timeZone), "yyyyMMdd", {
+          locale: ko,
+          timeZone,
+        }),
+        strTime: format(toZonedTime(date, timeZone), "HHmm", {
+          locale: ko,
+          timeZone,
+        }),
         strDuration: hour.toFixed(),
         strDurationHalf: minute.toFixed(),
         strSubject: title,
